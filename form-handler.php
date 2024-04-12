@@ -1,15 +1,31 @@
-<form action="form-handler.php" method="POST">
-  <label for="name">Name:</label>
-  <input type="text" id="name" name="name" required><br><br>
+<?php
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  $name = $_POST["name"];
+  $email = $_POST["email"];
+  $phone = $_POST["phone"];
+  $message = $_POST["message"];
 
-  <label for="email">Email:</label>
-  <input type="email" id="email" name="email" required><br><br>
+  // Email Address where you want to receive the messages
+  $to = "mrgdatastu@gmail.com";
 
-  <label for="phone">Phone:</label>
-  <input type="tel" id="phone" name="phone"><br><br>
+  // Subject of the email
+  $subject = "New Message from $name";
 
-  <label for="message">Message:</label><br>
-  <textarea id="message" name="message" rows="4" required></textarea><br><br>
+  // Email body
+  $body = "Name: $name\n";
+  $body .= "Email: $email\n";
+  $body .= "Phone: $phone\n";
+  $body .= "Message:\n$message";
 
-  <input type="submit" value="Submit">
-</form>
+  // Additional headers
+  $headers = "From: $name <$email>\r\n";
+  $headers .= "Reply-To: $email\r\n";
+
+  // Send email
+  if (mail($to, $subject, $body, $headers)) {
+    echo "Thank you for your message! We will get back to you soon.";
+  } else {
+    echo "Oops! Something went wrong and we couldn't send your message.";
+  }
+}
+?>
